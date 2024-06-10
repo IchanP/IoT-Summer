@@ -1,5 +1,6 @@
 from lib.simple import MQTTClient 
 
+# TODO needs to be reworked slightly.
 
 class MTTQManager:
 

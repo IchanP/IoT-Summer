@@ -4,12 +4,6 @@ import json
 
 led = machine.Pin("LED", machine.Pin.OUT)
 
-def get_sensor_data(sensor):
-    sensor.measure()
-    temp = sensor.temperature()
-    hum = sensor.humidity()
-    return temp, hum
-
 def handle_subscription(topic, msg):
     print(topic)
     # TODO add a condition to check if the topic is the same as the one we are subscribing to

@@ -6,7 +6,7 @@ class DHTHandler:
         self.sensor = dht.DHT11(machine.Pin(PIN))
     
     # Returns the temperature and humidity from the sensor in the [temp, hum] format
-    def read_sensor(self):
+    def read(self):
         self.sensor.measure()
         temp = self.sensor.temperature()
         hum = self.sensor.humidity()

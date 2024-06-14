@@ -11,6 +11,6 @@ class InputOutputFacade:
 
     def read_all_sensors(self):
         moistureReading = self.moistureSensor.read_percentage_moisture()
-       # temp, hum = self.dhtSensor.read()
+        # temp, hum = self.dhtSensor.read()
         # TODO - convert to JSON?
         return moistureReading

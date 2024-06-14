@@ -9,7 +9,8 @@ class MoistureHandler:
     def __init__(self, pin):
         self.sensor = ADC(Pin(pin))
 
-    
+    # Returns the percentage of moisture in the soil
+    # Lower value = drier soil
     def read_percentage_moisture(self):
         adc_value = self._read_raw()
         return self._calculate_percent(adc_value)
@@ -25,4 +26,4 @@ class MoistureHandler:
         else:
             adjusted_max = self.MAX_DRY - self.MAX_WET
             adjusted_reading = raw_value - self.MAX_WET
-            return round((adjusted_reading) / (adjusted_max) * 100, 2)
+            return round((100 - (adjusted_reading) / (adjusted_max) * 100), 2)

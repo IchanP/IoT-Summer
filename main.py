@@ -18,7 +18,8 @@ while True:
         sleep(5)
     except OSError as e:
         print(e)
-        reset()
+        sleep(2)
+        # reset()
     except Exception as e:
         print('An error occurred:', e) # Silently ignore
         sleep(5)

@@ -5,12 +5,12 @@ from InputOutput.LEDHandler import LEDHandler
 class InputOutputFacade:
     
     def __init__(self):
-        self.moistureSensor = MoistureHandler()
-        self.dhtSensor = DHTHandler()
-        self.led = LEDHandler()
+        self.moistureSensor = MoistureHandler(26)
+       # self.dhtSensor = DHTHandler()
+       # self.led = LEDHandler()
 
     def read_all_sensors(self):
-        moistureReading = self.moistureSensor.read()
-        temp, hum = self.dhtSensor.read()
+        moistureReading = self.moistureSensor.read_percentage_moisture()
+       # temp, hum = self.dhtSensor.read()
         # TODO - convert to JSON?
-        return moistureReading, temp, hum
+        return moistureReading

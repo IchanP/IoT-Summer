@@ -20,5 +20,4 @@ def json_preparation(key, value):
 
 def reset():
     print('Resetting the device...') 
-    sleep(5)
     machine.reset()

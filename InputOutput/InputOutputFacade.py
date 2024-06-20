@@ -12,12 +12,21 @@ class InputOutputFacade:
     def read_all_sensors(self):
         moistureReading = self.moistureSensor.read_percentage_moisture()
         self._enable_led(moistureReading)
-        temp, hum = self.dhtSensor.read()
-        print("temp: ", temp, "hum: ", hum)
-        return moistureReading, temp, hum
+        tempReading, humReading = self.dhtSensor.read()
+
+        return self._format_as_json(moistureReading, tempReading, humReading)
     
     def _enable_led(self, moistureReading):
         if moistureReading < 30:
             self.led.turn_on()
         elif self.led.is_on() and moistureReading > 30:
             self.led.turn_off()
+
+    def _format_as_json(self, moisture, temp, hum): 
+        data = {
+            "moisture": moisture,
+            "temperature": temp,
+            "humidity": hum
+        }
+        return data
+    

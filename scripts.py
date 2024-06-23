@@ -4,20 +4,24 @@ import json
 
 led = machine.Pin("LED", machine.Pin.OUT)
 
-def handle_subscription(topic, msg):
-    print(topic)
-    # TODO add a condition to check if the topic is the same as the one we are subscribing to
-    if msg == b'ON':
-        led.value(1)
-    elif msg == b'OFF':
-        led.value(0)
-
-def json_preparation(key, value):
+def format_as_dictionary(moisture, temp, hum): 
     data = {
-        key: value
+        "moisture": moisture,
+        "temperature": temp,
+        "humidity": hum
     }
-    return json.dumps(data)
+    return data
 
 def reset():
     print('Resetting the device...') 
     machine.reset()
+
+def handle_subscription(topic, msg):
+    print(topic)
+    # TODO add a condition to check if the topic is the same as the one we are subscribing to
+    if msg == b'ON':
+        print('Turning on the LED')
+    elif msg == b'OFF':
+        print('Turning off the LED')
+    else:
+        print('Invalid message received:', msg)

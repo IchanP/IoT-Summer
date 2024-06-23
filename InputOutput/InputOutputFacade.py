@@ -1,6 +1,7 @@
 from InputOutput.MoistureHandler import MoistureHandler
 from InputOutput.DHTHandler import DHTHandler
 from InputOutput.LEDHandler import LEDHandler
+import ujson
 
 class InputOutputFacade:
     
@@ -9,24 +10,23 @@ class InputOutputFacade:
         self.dhtSensor = DHTHandler(14)
         self.led = LEDHandler(16)
 
-    def read_all_sensors(self):
+    def get_sensor_data(self):
         moistureReading = self.moistureSensor.read_percentage_moisture()
-        self._enable_led(moistureReading)
         tempReading, humReading = self.dhtSensor.read()
 
-        return self._format_as_json(moistureReading, tempReading, humReading)
+        return moistureReading, tempReading, humReading
     
-    def _enable_led(self, moistureReading):
-        if moistureReading < 30:
+    def subscription_callback(self, topic, msg):
+        print(msg)
+        parsedMsg = ujson.loads(msg)
+        if parsedMsg['msg'] == 'ON':
+            print('Turning on LED')
             self.led.turn_on()
-        elif self.led.is_on() and moistureReading > 30:
+        elif parsedMsg['msg'] == 'OFF':
+            print('Turning off LED')
             self.led.turn_off()
+        else:
+            print('Invalid message received:', msg)
 
-    def _format_as_json(self, moisture, temp, hum): 
-        data = {
-            "moisture": moisture,
-            "temperature": temp,
-            "humidity": hum
-        }
-        return data
+
     

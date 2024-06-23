@@ -7,7 +7,6 @@ class DHTHandler:
     
     # Returns the temperature and humidity from the sensor in the [temp, hum] format
     def read(self):
-        print(self.sensor)
         self.sensor.measure()
         temp = self.sensor.temperature()
         hum = self.sensor.humidity()

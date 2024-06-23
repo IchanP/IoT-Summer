@@ -32,8 +32,9 @@ The moisture, humidity and temperature is displayed in a web interface that is a
 | Resistor 0.25W 330R | Limits the current running to the LED | 1 SEK | [Electrokit](https://www.electrokit.com/en/motstand-kolfilm-0.25w-330ohm-330r) |
 
 The table lists the electrokit items as individual pieces, they were however bought in these two following kits:
-[LNU Start kit](https://www.electrokit.com/lnu-starter)
-[Sensor Kit - 25 Modules](https://www.electrokit.com/sensor-kit-25-moduler)
+
+- [LNU Start kit](https://www.electrokit.com/lnu-starter)
+- [Sensor Kit - 25 Modules](https://www.electrokit.com/sensor-kit-25-moduler)
 
 *Note: The MicroHDMI to HDMI cable is not strictly necessary as you can grab the Raspberry Pi's IP address without graphically interfacing with it. However these steps are not included in this tutorial.*
 
@@ -56,7 +57,35 @@ Grab the latest firmware from [Micropython's website](https://micropython.org/do
 
 ### Putting everything together
 
-![Circuit Diagram](./img/diagram.png)
+![Circuit Diagram](./img/diagram_bb.png)
+
+The diagram is accurate to real life.
+
+#### Wire color coding
+
+- White wires represent power and are connected to the 3V3 pin on the Pico WH.
+- Black wires represent ground and are connected to the GND pin on the Pico WH.
+- Blue wires represent the data and are connected to the GP pins on the Pico WH.
+
+#### GP Connections
+
+The moisture sensors data wire is connected to GP26, or ADC0.
+The temperature and humidity sensors data wire is connected to GP14.
+The LED is connected to GP16.
+
+A resistor was required to limit the current running to the LED. The following formula, [Ohm's Law](https://en.wikipedia.org/wiki/Ohm's_law) provided on the IoT Course Discord, was used to calculate the resistance needed:
+
+Resistor Value Required = Supply Voltage - Forward Voltage / Forward Current.
+
+The LED used in this project has a forward voltage of 2V and a forward current of 25mA. The supply voltage is 3.3V. The calculation is as follows:
+
+```js
+(3.3 - 2) / 0.025 = 52
+```
+
+Meaning we need a resistor with a resistance of 52 Ohms. The closest resistor available was 330 Ohms, which was used in the project.
+
+*Do not be misled if you cannot find proper documentation on the power requirements of the AZDelivery Moisture Sensor, it works using 3.3V and is not limited to 5V as the technical specification may suggest.*
 
 ### Platform
 

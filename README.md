@@ -40,7 +40,7 @@ The table lists the electrokit items as individual pieces, they were however bou
 
 ### Computer Setup
 
-The project was developed on a PC running Windows 10. 
+The project was developed on a PC running Windows 10.
 
 #### IDE and plugins
 
@@ -53,7 +53,13 @@ Grab the latest firmware from [Micropython's website](https://micropython.org/do
 
 #### Raspberry Pi OS Installation
 
-// TODO Does the Raspberry Pi installation go here?
+To install the Raspberry Pi Operating Systemn we use the MicroSD card and card reader and the official [Raspberry Pi Imager software](https://www.raspberrypi.com/software/). Using the software allows us to easily install the Raspberry Pi OS onto the MicroSD card and preconfigure Wifi and SSH settings, so we can access the Raspberry Pi remotely. The username and password for the Raspberry Pi OS is used when connecting to the Raspberry Pi through SSH if you select the **Use password authentication** option. I used the Public-key option and could simply SSH into the Raspberry Pi with the following command:
+
+```bash
+ssh <username>@<raspberry-ip-address>
+```
+
+This requires us to know the IP address of the Raspberry Pi, which can be found by connecting the Raspberry Pi to a monitor and hovering over the Wifi icon in the top right corner of the screen. There are other options of finding the IP address remotely which do not require plugging the Raspberry Pi into a monitor, but they are not covered in this tutorial.
 
 ### Putting everything together
 

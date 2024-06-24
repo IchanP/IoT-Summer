@@ -19,7 +19,6 @@ class InputOutputFacade:
         return moistureReading, tempReading, humReading, lightReading
     
     def subscription_callback(self, topic, msg):
-        print(msg)
         parsedMsg = ujson.loads(msg)
         if parsedMsg['msg'] == 'ON':
             print('Turning on LED')

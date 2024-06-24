@@ -83,6 +83,8 @@ The moisture sensors data wire is connected to GP26, or ADC0.
 The temperature and humidity sensors data wire is connected to GP14.
 The LED is connected to GP16.
 
+#### Resistors and Voltage Dividers
+
 A resistor was required to limit the current running to the LED. The following formula, [Ohm's Law](https://en.wikipedia.org/wiki/Ohm's_law) provided on the IoT Course Discord, was used to calculate the resistance needed:
 
 Resistor Value Required = Supply Voltage - Forward Voltage / Forward Current.
@@ -95,7 +97,12 @@ The LED used in this project has a forward voltage of 2V and a forward current o
 
 Meaning we need a resistor with a resistance of 52 Ohms. The closest resistor available was 330 Ohms, which was used in the project.
 
-// TODO voltage divider for the photoresistor needs to be explained here
+A resistor was used to create a voltage divider for the photoresistor. This allows the varying resistance of the photoresistor to be read by the Pico WH. The photoresistor has a resistance of 4-7 kOhm. The resistor used in the voltage divider was 10 kOhm. Without this extra resistor we would receive a very constant value, rendering it impossible to read the brightness value. The voltage divider formula is as follows:
+
+```js
+ Vin * R2 / (R1 + R2) = Vout  // Vin is the voltage input (3.3V) R1 is the variable resistance of the photoresistor and R2 is the resistance of the resistor.
+3.3 * 10000 / (10000 + 5000) = 2.2 // Meaning the output voltage is 2.2V when the photoresistor is at 5 kOhm (Should be bright).
+```
 
 *Do not be misled if you cannot find proper documentation on the power requirements of the AZDelivery Moisture Sensor, it works using 3.3V and is not limited to 5V as the technical specification may suggest.*
 

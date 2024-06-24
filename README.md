@@ -30,6 +30,8 @@ The moisture, humidity and temperature is displayed in a web interface that is a
 | 2x USB-Cable A-Male to Micro B-Male *Adapter not included* | Powers the Pico and the Raspberry Pi | 28 SEK | [Electrokit](https://www.electrokit.com/en/usb-kabel-a-hane-micro-b-hane-60cm) |
 | LED 5mm Red Diffuse | Lights up when the plant needs attention | 5 SEK | [Electrokit](https://www.electrokit.com/en/led-5mm-rod-diffus-1500mcd) |
 | Resistor 0.25W 330R | Limits the current running to the LED | 1 SEK | [Electrokit](https://www.electrokit.com/en/motstand-kolfilm-0.25w-330ohm-330r) |
+| Resistor  0.25W 10kohm (10k) | Acts as a voltage divider for the photoresistor | 1 SEK | [Electrokit](https://www.electrokit.com/motstand-kolfilm-0.25w-10kohm-10k) |
+| Photo resistor CdS 4-7 kohm  | Reads the light that the plants receive | 8 SEK | [Electrokit](https://www.electrokit.com/en/fotomotstand-cds-4-7-kohm) |
 
 The table lists the electrokit items as individual pieces, they were however bought in these two following kits:
 
@@ -63,6 +65,8 @@ This requires us to know the IP address of the Raspberry Pi, which can be found 
 
 ### Putting everything together
 
+// TODO needs an update
+
 ![Circuit Diagram](./img/diagram_bb.png)
 
 The diagram is accurate to real life.
@@ -90,6 +94,8 @@ The LED used in this project has a forward voltage of 2V and a forward current o
 ```
 
 Meaning we need a resistor with a resistance of 52 Ohms. The closest resistor available was 330 Ohms, which was used in the project.
+
+// TODO voltage divider for the photoresistor needs to be explained here
 
 *Do not be misled if you cannot find proper documentation on the power requirements of the AZDelivery Moisture Sensor, it works using 3.3V and is not limited to 5V as the technical specification may suggest.*
 

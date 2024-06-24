@@ -1,6 +1,7 @@
 from InputOutput.MoistureHandler import MoistureHandler
 from InputOutput.DHTHandler import DHTHandler
 from InputOutput.LEDHandler import LEDHandler
+from InputOutput.PhotoResistorHandler import PhotoResistorHandler
 import ujson
 
 class InputOutputFacade:
@@ -9,12 +10,13 @@ class InputOutputFacade:
         self.moistureSensor = MoistureHandler(26)
         self.dhtSensor = DHTHandler(14)
         self.led = LEDHandler(16)
+        self.lightSensor = PhotoResistorHandler(27)
 
     def get_sensor_data(self):
         moistureReading = self.moistureSensor.read_percentage_moisture()
         tempReading, humReading = self.dhtSensor.read()
-
-        return moistureReading, tempReading, humReading
+        lightReading = self.lightSensor.read_percentage_light()
+        return moistureReading, tempReading, humReading, lightReading
     
     def subscription_callback(self, topic, msg):
         print(msg)

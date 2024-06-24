@@ -4,11 +4,12 @@ import json
 
 led = machine.Pin("LED", machine.Pin.OUT)
 
-def format_as_dictionary(moisture, temp, hum): 
+def format_as_dictionary(moisture, temp, hum, light): 
     data = {
         "moisture": moisture,
         "temperature": temp,
-        "humidity": hum
+        "humidity": hum,
+        "brightness": light
     }
     return data
 

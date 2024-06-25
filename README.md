@@ -63,7 +63,39 @@ ssh <username>@<raspberry-ip-address>
 
 This requires us to know the IP address of the Raspberry Pi, which can be found by connecting the Raspberry Pi to a monitor and hovering over the Wifi icon in the top right corner of the screen. There are other options of finding the IP address remotely which do not require plugging the Raspberry Pi into a monitor, but they are not covered in this tutorial.
 
-// TODO Explain how to setup Node-RED, InfluxDB and Grafana on the Raspberry Pi.
+#### Installing Mosquitto, Node-Red, InfluxDB and Grafana
+
+IoT-stack was used to quickly setup the visualisation/mqtt stack. The IoT stack program was pulled onto the raspberry pi using the following terminal command:
+```curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash```
+This downloads the IoT stack program onto the raspberry pi and installs it.
+
+IoT-stack builds a docker-compose file which allows us to quickly launch all of these applications with a single command and not have to worry too much about configuration.
+
+Following this we then enter the menu of the program by opening the menu.sh file located in the IOTstack folder.
+
+```cd IOTstack/menu.sh```
+
+We now select the programs we wish to install. This project runs the stack grafana, influxdb, mosquitto as a broker and Node-Red. We select these programs by navigating the menu and selecting them. The program will then build the docker-compose file and launch the applications.
+
+Following this we set up the influxdb database by actually creating the database to which we will write. We will name it "sensor data". To do this we access the command line of the influxdb application by using this command:
+
+```docker exec -it influxdb influx```
+
+This tells docker to run the influxdb CLI in interactive mode for us. Meaning we can talk to the influxd application in the command tool.
+
+Here we create the database with the following command:
+
+```CREATE DATABASE sensor_data```
+
+These applications are accessible in the browser with the following addresses:
+
+- Grafana: http://<raspberry-ip-address>:3000
+- Node-Red: http://<raspberry-ip-address>:1880
+
+InfluxDB and Mosquitto are not accessible through the browser, but they are running on the Raspberry Pi on the following ports:
+
+- InfluxDB: 8086
+- Mosquitto: 1883
 
 ### Putting everything together
 

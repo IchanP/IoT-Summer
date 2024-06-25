@@ -89,8 +89,8 @@ Here we create the database with the following command:
 
 These applications are accessible in the browser with the following addresses:
 
-- Grafana: http://<raspberry-ip-address>:3000
-- Node-Red: http://<raspberry-ip-address>:1880
+- Grafana: http://< raspberry-ip-address >:3000
+- Node-Red: http://< raspberry-ip-address >:1880
 
 InfluxDB and Mosquitto are not accessible through the browser, but they are running on the Raspberry Pi on the following ports:
 

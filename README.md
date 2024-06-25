@@ -63,9 +63,9 @@ ssh <username>@<raspberry-ip-address>
 
 This requires us to know the IP address of the Raspberry Pi, which can be found by connecting the Raspberry Pi to a monitor and hovering over the Wifi icon in the top right corner of the screen. There are other options of finding the IP address remotely which do not require plugging the Raspberry Pi into a monitor, but they are not covered in this tutorial.
 
-### Putting everything together
+// TODO Explain how to setup Node-RED, InfluxDB and Grafana on the Raspberry Pi.
 
-// TODO needs an update
+### Putting everything together
 
 ![Circuit Diagram](./img/diagram_bb.png)
 
@@ -79,9 +79,9 @@ The diagram is accurate to real life.
 
 #### GP Connections
 
-The moisture sensors data wire is connected to GP26, or ADC0.
-The temperature and humidity sensors data wire is connected to GP14.
-The LED is connected to GP16.
+- The moisture sensors data wire is connected to GP26, or ADC0.
+- The temperature and humidity sensors data wire is connected to GP14.
+- The LED is connected to GP16.
 
 #### Resistors and Voltage Dividers
 
@@ -107,6 +107,23 @@ A resistor was used to create a voltage divider for the photoresistor. This allo
 *Do not be misled if you cannot find proper documentation on the power requirements of the AZDelivery Moisture Sensor, it works using 3.3V and is not limited to 5V as the technical specification may suggest.*
 
 ### Platform
+
+The platform stack runs locally on the Raspberry Pi. The choice to run the stack locally was made due to the authors aversion to cloud services. The stack is also more secure as it does not require any data to be sent outside of the local network.
+
+The stack of choice for this project is as follows:
+
+- [Mosquitto](https://mosquitto.org/) as the MQTT broker for the communication between the Raspberry Pi and the Pico WH.
+- [Node-RED](https://nodered.org/) for connecting the MQTT broker to the InfluxDB and Grafana. Node-RED is also used to send messages to Discord and for conditional logic. The conditional logic is more closely examined in the [Code](#the-code) section.
+- [InfluxDB](https://www.influxdata.com/) as the database for storing the sensor data.
+- [Grafana](https://grafana.com/) for visualizing the data stored in the InfluxDB.
+
+It is entirely possible to scale this project to include more sensors and more functionality. The Raspberry Pi has more than enough computing power to handle more data transmissions and logic in Node-RED. The one consideration is the amount of data stored in the InfluxDB, as the Raspberry Pi has a limited amount of storage space. This can however be easily upgraded by using an external hard drive or a larger MicroSD card.
+
+A choice was made between Telegraf and Node-RED for the integration between the different parts. Node-RED was chosen due to its graphical interface, making the visualization of the data flow easier to understand. This stack could run using Telegraf as well and is, I believe, the more orthodox choice.
+
+Following is a visualization of the dataflow between the different parts of the project. It is not meant to be an exhaustive explanation of what happens to the data at each step, but rather a high-level overview of the data flow.
+
+[Flowchart](./img/dataflow.png)
 
 ### The code
 

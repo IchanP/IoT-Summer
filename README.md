@@ -2,7 +2,7 @@
 
 This tutorial will guide you through the process of creating a plant monitor using a Raspberry Pi as a controller. The project may take approximately 4-7 hours to complete provided you have all the hardware available.
 
-The project creates a notification system that will alert you over Discord when your plant needs watering (or is drowning). The project will use a Raspberry Pi as a controller and local server to monitor the soil moisture of the plant and send a message to Discord when the soil moisture is too low or too high.
+The project creates a notification system that will alert you over Discord when your plant needs watering (or is drowning). The project will use a Raspberry Pi as a controller and as a local server to monitor the soil moisture of the plant and send a message to Discord when the soil moisture is too low or too high.
 
 *Author: Pontus Grandin*
 *ID: pg222pb*
@@ -11,7 +11,7 @@ The project creates a notification system that will alert you over Discord when 
 
 I often forget to water my plants. A device that would alert me when my plants need attention would therefore be useful. The project reads and stores the soil moisture of the plant as well as the humidity and temperature of the room. Although the moisture levels is what will trigger the alert.
 
-The moisture, humidity and temperature is displayed in a web interface that is accessible on the local network for the user to monitor and interpet.
+The moisture, humidity and temperature is displayed in a web interface that is accessible on the local network for the user to monitor and interpret.
 
 ### Material
 
@@ -55,7 +55,7 @@ Grab the latest firmware from [Micropython's website](https://micropython.org/do
 
 #### Raspberry Pi OS Installation
 
-To install the Raspberry Pi Operating Systemn we use the MicroSD card and card reader and the official [Raspberry Pi Imager software](https://www.raspberrypi.com/software/). Using the software allows us to easily install the Raspberry Pi OS onto the MicroSD card and preconfigure Wifi and SSH settings, so we can access the Raspberry Pi remotely. The username and password for the Raspberry Pi OS is used when connecting to the Raspberry Pi through SSH if you select the **Use password authentication** option. I used the Public-key option and could simply SSH into the Raspberry Pi with the following command:
+To install the Raspberry Pi Operating Systemn we use the MicroSD card and card reader and the official [Raspberry Pi Imager software](https://www.raspberrypi.com/software/). Using the software allows us to easily install the Raspberry Pi OS onto the MicroSD card and preconfigure Wifi and SSH settings, so we can access the Raspberry Pi remotely. The username and password for the Raspberry Pi OS is used when connecting to the Raspberry Pi through SSH if you select the **Use password authentication** option. The author used the Public-key option and could simply SSH into the Raspberry Pi with the following command:
 
 ```bash
 ssh <username>@<raspberry-ip-address>
@@ -82,6 +82,7 @@ The diagram is accurate to real life.
 - The moisture sensors data wire is connected to GP26, or ADC0.
 - The temperature and humidity sensors data wire is connected to GP14.
 - The LED is connected to GP16.
+- The photoresistor is connected to GP27, or ADC1.
 
 #### Resistors and Voltage Dividers
 
@@ -117,9 +118,9 @@ The stack of choice for this project is as follows:
 - [InfluxDB](https://www.influxdata.com/) as the database for storing the sensor data.
 - [Grafana](https://grafana.com/) for visualizing the data stored in the InfluxDB.
 
-It is entirely possible to scale this project to include more sensors and more functionality. The Raspberry Pi has more than enough computing power to handle more data transmissions and logic in Node-RED. The one consideration is the amount of data stored in the InfluxDB, as the Raspberry Pi has a limited amount of storage space. This can however be easily upgraded by using an external hard drive or a larger MicroSD card.
+It is entirely possible to scale this project to include more sensors and more functionality. The Raspberry Pi has more than enough computing power to handle more data transmissions and logic in Node-RED. The one consideration is the amount of data stored in the InfluxDB, as the Raspberry Pi has a limited amount of storage space. This can, however, be easily upgraded by using an external hard drive or a larger MicroSD card.
 
-A choice was made between Telegraf and Node-RED for the integration between the different parts. Node-RED was chosen due to its graphical interface, making the visualization of the data flow easier to understand. This stack could run using Telegraf as well and is, I believe, the more orthodox choice.
+A choice was made between [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/) and Node-RED for the integration between the different parts. Node-RED was chosen due to its graphical interface, making the visualization of the data flow easier to understand. This stack could run using Telegraf as well and is, the author believes, the more orthodox choice.
 
 Following is a visualization of the dataflow between the different parts of the project. It is not meant to be an exhaustive explanation of what happens to the data at each step, but rather a high-level overview of the data flow.
 

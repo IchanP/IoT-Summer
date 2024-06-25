@@ -27,11 +27,11 @@ The moisture, humidity and temperature is displayed in a web interface that is a
 | KIOXIA 32GB EXCERIA microSD | Holds the Raspberry Pi OS, influxDB data and acts as the main memory storage for the Raspberry Pi | 55 SEK | [Amazon.se](https://www.amazon.se/-/en/dp/B088RQCCDJ?psc=1&ref=ppx_yo2ov_dt_b_product_details) |
 | Jumper Wires Male/Male | Run electrical currents for giving power/sensor readings | 49 SEK | [Electrokit](https://www.electrokit.com/en/labbsladd-40-pin-30cm-hane/hane) |
 | Digital temperature and humidity sensor DHT11 | Reading the temperature and humidity of the air | 49 SEK | [Electrokit](https://www.electrokit.com/en/digital-temperatur-och-fuktsensor-dht11) |
+| Photo resistor CdS 4-7 kohm  | Reads the light that the plants receive | 8 SEK | [Electrokit](https://www.electrokit.com/en/fotomotstand-cds-4-7-kohm) |
 | 2x USB-Cable A-Male to Micro B-Male *Adapter not included* | Powers the Pico and the Raspberry Pi | 28 SEK | [Electrokit](https://www.electrokit.com/en/usb-kabel-a-hane-micro-b-hane-60cm) |
 | LED 5mm Red Diffuse | Lights up when the plant needs attention | 5 SEK | [Electrokit](https://www.electrokit.com/en/led-5mm-rod-diffus-1500mcd) |
 | Resistor 0.25W 330R | Limits the current running to the LED | 1 SEK | [Electrokit](https://www.electrokit.com/en/motstand-kolfilm-0.25w-330ohm-330r) |
 | Resistor  0.25W 10kohm (10k) | Acts as a voltage divider for the photoresistor | 1 SEK | [Electrokit](https://www.electrokit.com/motstand-kolfilm-0.25w-10kohm-10k) |
-| Photo resistor CdS 4-7 kohm  | Reads the light that the plants receive | 8 SEK | [Electrokit](https://www.electrokit.com/en/fotomotstand-cds-4-7-kohm) |
 
 The table lists the electrokit items as individual pieces, they were however bought in these two following kits:
 

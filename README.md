@@ -123,7 +123,7 @@ A choice was made between Telegraf and Node-RED for the integration between the 
 
 Following is a visualization of the dataflow between the different parts of the project. It is not meant to be an exhaustive explanation of what happens to the data at each step, but rather a high-level overview of the data flow.
 
-[Flowchart](./img/dataflow.png)
+![Flowchart](./img/dataflow.png)
 
 ### The code
 

@@ -326,9 +326,11 @@ if (isWithinOperableHours && msg.payload.needsAttention && !isLedOn) { // Turn o
 return null
 ```
 
-We use the current hour to determine if the LED should be on or off. The LED should only be on between 9 and 21. The LED should be on if the plant needs attention and the LED is off. The LED should be off if the plant does not need attention and the LED is on, or if the current hour is outside the operable hours and the LED is on. We return `null` if the LED should not be turned on or off, essentially making the function node a no-op and communicating to Node-RED that the flow should terminate. 
+We use the current hour to determine if the LED should be on or off. The LED should only be on between 9 and 21. The LED should be on if the plant needs attention and the LED is off. The LED should be off if the plant does not need attention and the LED is on, or if the current hour is outside the operable hours and the LED is on. We return `null` if the LED should not be turned on or off, essentially making the function node a no-op and communicating to Node-RED that the flow should terminate.
 
 ## Transmitting the data / connectivity
+
+
 
 ## Presenting the data
 

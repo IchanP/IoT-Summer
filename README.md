@@ -19,8 +19,9 @@ This tutorial will guide you through the process of creating a plant monitor usi
 
 The project creates a notification system that will alert you over Discord when your plant needs watering (or is drowning). The project will use a Raspberry Pi as a controller and as a local server to monitor the soil moisture of the plant and send a message to Discord when the soil moisture is too low or too high.
 
-*Author: Pontus Grandin*
-*ID: pg222pb*
+*Author: ```Pontus Grandin```*
+
+*ID: ```pg222pb```*
 
 ## Objective
 
@@ -184,6 +185,148 @@ Following is a visualization of the dataflow between the different parts of the 
 ![Flowchart](./img/dataflow.png)
 
 ## The code
+
+The code of this project can be divided into two parts, the code running on the microcontroller and the code running on the Raspberry Pi.
+
+### Pico WH Code
+
+The code running on the Pico WH is written in Micropython and can be largely be divided into three parts. The first part being the reading of the sensors, the second part being the sending and receiving of data over MQTT and the third part being the WiFi connectivity. The WiFi connectivity code is largely copied from the IoT LNU Course material accessible [here](https://hackmd.io/@lnu-iot/rJVQizwUh) and will therefore be omitted from this tutorial.
+
+An overview of how the code is ran can be found in the main loop of the code. Data is transmitted and received over MQTT every minute. The 10 second sleep following the publish is to allow the data to be processed by the Node-RED flow and possibly publish a message to our subscribed topic, immediatelly checking the message after publishing would see a full minute delay between Node-RED publishing a message and the Pico WH receiving it.
+
+```js
+    moisture, temp, hum, light = IOHandler.get_sensor_data() // Collects and reads the sensor data
+    sensorDictionary = format_as_dictionary(moisture, temp, hum, light) // Prepares the data for transmission by converting it to a dictionary
+    manager.publish(MQTT_PUBLISH_TOPIC, sensorDictionary) // Publish the data to the MQTT broker
+    sleep(10) // Sleep for 10 seconds to allow the Node-RED flow to process the data
+    manager.check_msg() // Check for incoming MQTT messages from the Node-RED flow
+    sleep(50)
+```
+
+None if this is possible without first connecting to the Wifi network. The configuration for the Wifi network is done in the `config.py` file, along with the MQTT broker IP address and the topic to publish and subscribe to. Following is a snippet of the `config.py` file, with omitted details. These variables are imported into the boot sequence and other parts of the code as important constants.
+
+```python
+import machine
+import ubinascii
+WIFI_SSID = 'WIFI NAME 
+WIFI_PASSWORD = 'PW'
+MQTT_SERVER = 'IP-ADRESS'
+MQTT_PUBLISH_TOPIC = '/plant/bedroom'
+MQTT_SUBSCRIBE_TOPIC = 'bedroom/led'
+```
+The connection to the MQTT broker is handled by the `MQTTManager` class which is dependent on the `MQTTClient` library. The library can be accessed [here](./lib/simple.py), or if you would rather grab it from the [source here](https://github.com/micropython/micropython-lib/blob/master/micropython/umqtt.simple/umqtt/simple.py). The `MQTTManager` class is responsible for connecting to the MQTT broker, publishing and subscribing to topics and checking for incoming messages.
+
+```py
+from lib.simple import MQTTClient 
+import ujson
+
+# TODO needs to be reworked slightly.
+
+class MQTTManager:
+
+    def __init__(self, client_id: str, server: str, port: int):
+        self.client = MQTTClient(client_id, server, port)
+        self.client.connect()
+
+    def enable_subcsription(self, topic, callback):
+        self.client.set_callback(callback)
+        self.client.subscribe(topic)
+
+    def publish(self, topic: str, msg: str):
+        json_msg = ujson.dumps(msg)
+        self.client.publish(topic, json_msg)
+
+    def check_msg(self):
+        self.client.check_msg()
+```
+
+In our ```main.py``` file we pass subscription callback method to the MQTTManager class following the initialization, which simply turns on or off the LED based on the message received from the subscription topic.
+
+**main.py**
+
+```js
+# Connect to the MQTT server
+manager = MQTTManager(DEVICE_ID, MQTT_SERVER, 1883)
+IOHandler = InputOutputFacade()
+manager.enable_subcsription(MQTT_SUBSCRIBE_TOPIC, IOHandler.subscription_callback)
+```
+
+**InputOutputFacade.py**
+
+```py
+def subscription_callback(self, topic, msg):
+    parsedMsg = ujson.loads(msg)
+    if parsedMsg['msg'] == 'ON':
+        print('Turning on LED')
+        self.led.turn_on()
+    elif parsedMsg['msg'] == 'OFF':
+        print('Turning off LED')
+        self.led.turn_off()
+    else:
+        print('Invalid message received:', msg)
+```
+
+### Node-RED Code
+
+The Node-RED code is written in Javascript.
+
+The interesting part of the Node-RED code is the conditiona logic that decides when to send a message to Discord and when to turn on/off the LED. This is achieved through the use of the `switch` and `function` nodes. The `switch` node is used to conditionally execute nodes in the flow based on the return value of the `function` node. There are 2 main `function` nodes in the flow, one for checking the moisture of the soil and one for controlling the LED.
+
+#### Moisture Node
+
+```js
+const userName = "Bedroom Plant Monitor" // Discord username
+const maxMoisture = flow.get('maxMoisture') // Set to 80
+const minMoisture = flow.get('minMoisture') // Set to 30
+
+if (msg.payload.moisture < minMoisture || msg.payload.moisture > maxMoisture) {
+   return {
+      payload: {
+          content: `Plant is in danger-zone! Moisture level: ${msg.payload.moisture}`, // Message displayed in Discord
+          username: userName,
+          needsAttention: true
+      }
+   }
+} else {
+   return {
+      payload: {
+         needsAttention: false
+      }
+   }
+}
+```
+
+The if statement will execute if the moisture level is below 30 or above 80. The message will be sent to Discord with the moisture level and the username of the bot. The `needsAttention` variable is used to control the Node-RED flow, the following `switch` node will conditionally execute the following nodes based on the value of `needsAttention`. If `needsAttention` is false the Discord hook will not be executed.
+
+#### LED Node
+
+```js
+const currentDate = new Date()
+const latestHour = flow.get('ledStopHour') // Set to 21
+const earliestHour = flow.get('ledStartHour') // Set to 9
+const hour = currentDate.getHours() // Fetch current hour
+const isWithinOperableHours = hour < latestHour && hour >= earliestHour // Check if the current hour is within the operable hours
+const isLedOn = flow.get('ledOn') // Fetch current LED state
+
+if (isWithinOperableHours && msg.payload.needsAttention && !isLedOn) { // Turn on the LED if the hours are within the operable hours, the plant needs attention and the LED is off
+    flow.set('ledOn', true)
+    return {
+        payload: {
+            msg: "ON"
+        }
+    }
+} else if ((!isWithinOperableHours && isLedOn) || (!msg.payload.needsAttention && isLedOn)){ // Turn off the LED if the hours are outside the operable hours and the LED is on, or if the plant does not need attention and the LED is on
+    flow.set('ledOn', false)
+    return {
+        payload: {
+            msg: "OFF"
+        }
+    }
+}
+return null
+```
+
+We use the current hour to determine if the LED should be on or off. The LED should only be on between 9 and 21. The LED should be on if the plant needs attention and the LED is off. The LED should be off if the plant does not need attention and the LED is on, or if the current hour is outside the operable hours and the LED is on. We return `null` if the LED should not be turned on or off, essentially making the function node a no-op and communicating to Node-RED that the flow should terminate. 
 
 ## Transmitting the data / connectivity
 

@@ -16,9 +16,9 @@ while True:
         moisture, temp, hum, light = IOHandler.get_sensor_data()
         sensorDictionary = format_as_dictionary(moisture, temp, hum, light)
         manager.publish(MQTT_PUBLISH_TOPIC, sensorDictionary)
-        sleep(2)
+        sleep(10)
         manager.check_msg()
-        sleep(2)
+        sleep(50)
     except OSError as e:
         print(e)
         sleep(2)

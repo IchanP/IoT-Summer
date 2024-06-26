@@ -330,8 +330,16 @@ We use the current hour to determine if the LED should be on or off. The LED sho
 
 ## Transmitting the data / connectivity
 
+This project utilizes WiFi for transmitting the data from the Pico WH to the Raspberry Pi. The choice of WiFi was chosen due to the local nature of the project, there is no need for the long range communication that LoRaWAN offers. The data is transmitted over MQTT, which was chosen due to its ease of implementation and how lightweight it is. The data is transmitted from the Pico WH to the Raspberry Pi every minute. The data is then processed by the Node-RED flow and stored in the InfluxDB.
 
+The Discord message is transmitted using a webhook. The webhook is created in Discord and the URL is added to the `http request` node in the Node-RED flow. The message is sent to Discord when the plant needs attention.
+
+As no port-forwarding was done the project is only accessible on the local network. That means that the MQTT transmission can only occur on the local network. The same goes for the visualisation of the data in Grafana, the dashboard is only accessible on the local network. To successfully expand the project outside of the WiFi range would require port-forwarding to be enabled on the router. This would allow the MQTT broker to be accessible from the internet and the data to be transmitted from the Pico WH to the Raspberry Pi from anywhere in the world.
+
+// TODO add part about battery consumption (do power calculations)
 
 ## Presenting the data
+
+![Node-RED flow](./img/node-red-flow.png)
 
 ## Finalizing the design

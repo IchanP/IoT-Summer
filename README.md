@@ -390,4 +390,37 @@ For robustness sake we will round up to 16500 mAh. We therefore need to find a b
 
 ![Node-RED flow](./img/node-red-flow.png)
 
+*Depicts the Node-RED flow which shows the path the data takes to reach the database*
+
+### Database
+
+The data is stored in InfluxDb. InfluxDB was not chosen for any particular reason outside of it already being included as a possible choice node in Node-RED and it being a time-series database. Other options for time-series databases include [TimescaleDB](https://www.timescale.com/). The data is stored in the database every minute, in accordance with the data transmission from the Pico WH.
+
+InfluxDB offers the ability to automatically delete data older than a certain time period. This is useful for keeping the database size down and not having to manually delete old data. This is not utilized in this project but may be something to consider if the project is scaled up or to future proof the project.
+
+The data transmitted from the Pico WH is stored in the database in the following format:
+
+```json
+{
+    "moisture": 50.12,
+    "temperature": 20,
+    "humidity": 50,
+    "brightness": 10.14
+}
+```
+
+Example of how the data looks when read from the terminal. Brightness value is not included in the example.
+
+![Terminal example](./img/terminal-example.png)
+
+### Grafana
+
+The data stored in the InfluxDB is visualized in Grafana. Grafana was chosen due to its ease of use and the ability to create dashboards with a few clicks. The data is visualized in a time-series graph, showing the moisture, temperature and humidity of the plant over time. Grafana queries InfluxDB every minute for the data to update the graphs. Grafana recommends to query in intervals matching the write-interval of the database, which is why the query is set to 1 minute.
+
+![Grafana dashboard](./img/grafana-dashboard.png)
+
+### Automation/Triggers
+
+The automation/triggers are described in the [Node-RED Code](#node-red-code) section.
+
 ## Finalizing the design

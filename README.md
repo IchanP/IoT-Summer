@@ -336,7 +336,57 @@ The Discord message is transmitted using a webhook. The webhook is created in Di
 
 As no port-forwarding was done the project is only accessible on the local network. That means that the MQTT transmission can only occur on the local network. The same goes for the visualisation of the data in Grafana, the dashboard is only accessible on the local network. To successfully expand the project outside of the WiFi range would require port-forwarding to be enabled on the router. This would allow the MQTT broker to be accessible from the internet and the data to be transmitted from the Pico WH to the Raspberry Pi from anywhere in the world.
 
-// TODO add part about battery consumption (do power calculations)
+### Power Consumption
+
+As it may be relevant to monitor plants that are not near an electrical socket, such as plants that are located outside or on a balcony. The feasability of a battery powered solution will be presented here.
+
+The power consumption will be calculated for the Pico WH exclusively. The Raspberry Pi Model 4 is expected to be ran connected to a stable power source at all times. The Pico WH will be scenarioally powered by a battery, and the power consumption will be calculated for this scenario. Ideally the power consumption should have been measured using a multimeter, but the author did not have access to one.
+
+The Pico WH is estimated to draw about 45mA/hour according to [this blogpost](https://stfn.pl/blog/34-pico-power-consumption-solar-panels/#solution). As the Raspberry Pi Pico datasheet provided 0 information about the estimated power consumption I have based the Pico WH estimated consumption on the above blogpost.
+
+The Soil Moisture Sensor Hygrometer Module V1.2 does not list an estimated operating current in any of its various data sheet, however the operating current was located on the [following website](https://www.inro-electronics.com/capacitive-soil-moisture-sensor?limit=75). The author could not locate the operating current anywhere else so this is the source which was used.
+
+The current of the photoresistor was calculated following the following formula:
+
+```cmd
+Current = Voltage (from the Pico WH) / Resistance (of the photoresistor)
+Current * 1000 = mA // Convert to mA
+```
+
+As the photoresistor has a variable resistance of 4k - 1m Ohm the current will vary depending on the light conditions. The current was calculated to be 0.33mA when the photoresistor is at 5k Ohm. The current will be higher when the photoresistor is at 4k Ohm and lower when the photoresistor is at 7k Ohm. The author decided to simply the calculation by using the highest value of 4k and considering this to be a constant value.
+
+The calculation then is as follows:
+
+```cmd
+3.3V / 4000 = 0.000825A
+0.000825 * 1000 = 0.825mA
+```
+
+Recommendations are to add about 20% to the estimated power consumption to have a buffer for the power consumption. This 20% will be added at the end of the calculation.
+
+- Pico WH hourly consumption: 45mA
+- DHT11 sensor consumption: 2.5mA (Maximal consumption chosen as value, average consumption is 1mA)
+- Capacitive Soil Moisture Sensor consumption: 20mA (Maximal consumption chosen as value, average consumption is less than 20mA)
+- LED consumption: 25mA
+- Photoresistor consumption: 0.825mA
+
+However as the LED will not be powered on all the time and has a limited uptime of 12 hours a day the LED consumption will be cut in half to 12.5mA.
+
+This lands the total power consumption at:
+
+```cmd
+45mA + 2.5mA + 20mA + 25mA + 0.825mA = 80,825mA
+// Accounting for the 20% buffer
+80,825mA * 1.2 = 96.99mA
+```
+
+As we do not want to replace our battery all too often we will calculate the power consumption and required battery for a week of operation. The Pico WH will be running 24/7 and will be transmitting data every minute. There are 168 hours in a week, the calculation therefore is as follows:
+
+```cmd
+96.99 * 168 = 16277.32mAh
+```
+
+For robustness sake we will round up to 16500 mAh. We therefore need to find a battery with the capacity of 16500mAh to power the Pico WH for a week. The [Anker PoewrCore 20100](https://www.anker.com/products/a1271?variant=37436932554902) is an example of a compatible battery. There are certainly others out there however.
 
 ## Presenting the data
 

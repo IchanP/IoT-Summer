@@ -1,8 +1,6 @@
 from lib.simple import MQTTClient 
 import ujson
 
-# TODO needs to be reworked slightly.
-
 class MQTTManager:
 
     def __init__(self, client_id: str, server: str, port: int):

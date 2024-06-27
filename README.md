@@ -214,13 +214,12 @@ MQTT_SERVER = 'IP-ADRESS'
 MQTT_PUBLISH_TOPIC = '/plant/bedroom'
 MQTT_SUBSCRIBE_TOPIC = 'bedroom/led'
 ```
+
 The connection to the MQTT broker is handled by the `MQTTManager` class which is dependent on the `MQTTClient` library. The library can be accessed [here](./lib/simple.py), or if you would rather grab it from the [source here](https://github.com/micropython/micropython-lib/blob/master/micropython/umqtt.simple/umqtt/simple.py). The `MQTTManager` class is responsible for connecting to the MQTT broker, publishing and subscribing to topics and checking for incoming messages.
 
 ```py
 from lib.simple import MQTTClient 
 import ujson
-
-# TODO needs to be reworked slightly.
 
 class MQTTManager:
 
@@ -362,8 +361,6 @@ The calculation then is as follows:
 0.000825 * 1000 = 0.825mA
 ```
 
-Recommendations are to add about 20% to the estimated power consumption to have a buffer for the power consumption. This 20% will be added at the end of the calculation.
-
 - Pico WH hourly consumption: 45mA
 - DHT11 sensor consumption: 2.5mA (Maximal consumption chosen as value, average consumption is 1mA)
 - Capacitive Soil Moisture Sensor consumption: 20mA (Maximal consumption chosen as value, average consumption is less than 20mA)
@@ -372,12 +369,13 @@ Recommendations are to add about 20% to the estimated power consumption to have 
 
 However as the LED will not be powered on all the time and has a limited uptime of 12 hours a day the LED consumption will be cut in half to 12.5mA.
 
+Recommendations are to add about 20% to the estimated power consumption to have a buffer for the power consumption.
 This lands the total power consumption at:
 
 ```cmd
 45mA + 2.5mA + 20mA + 25mA + 0.825mA = 80,825mA
 // Accounting for the 20% buffer
-80,825mA * 1.2 = 96.99mA
+80,825mA * 1.2 = 96.99mA 
 ```
 
 As we do not want to replace our battery all too often we will calculate the power consumption and required battery for a week of operation. The Pico WH will be running 24/7 and will be transmitting data every minute. There are 168 hours in a week, the calculation therefore is as follows:

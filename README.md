@@ -417,7 +417,7 @@ Example of how the data looks when read from the terminal. Brightness value is n
 
 The data stored in the InfluxDB is visualized in Grafana. Grafana was chosen due to its ease of use and the ability to create dashboards with a few clicks. The data is visualized in a time-series graph, showing the moisture, temperature and humidity of the plant over time. Grafana queries InfluxDB every minute for the data to update the graphs. Grafana recommends to query in intervals matching the write-interval of the database, which is why the query is set to 1 minute.
 
-![Grafana dashboard](./img/grafana-dashboard.png)
+![Grafana dashboard](./img/grafana.png)
 
 ### Automation/Triggers
 

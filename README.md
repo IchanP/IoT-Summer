@@ -427,4 +427,12 @@ The automation/triggers are described in the [Node-RED Code](#node-red-code) sec
 
 Overall the project was, I believe, a success. It does what it sets out to do and the local stack was a good choice for the project. The one problem I foresee is that the power consumption of the project is a bit too high to run it on a battery and scale up for several plants in the house. This is partly due to WiFi being very power hungry, perhaps a LoRaWAN solution would be better for scaling up the project.
 
-// TODO add picture
+![Pico-WH](./img/pico-wh%20sensor.jpg)
+
+![Pico-WH](./img/pico-wh-sensor-2.png)
+
+*The Pico WH with the sensors attached*
+
+![Raspberry Pi](./img/raspberry-pi.png)
+
+*The Raspberry Pi 4 Model B, power not connected in image*

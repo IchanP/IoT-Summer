@@ -427,6 +427,8 @@ The automation/triggers are described in the [Node-RED Code](#node-red-code) sec
 
 Overall the project was, I believe, a success. It does what it sets out to do and the local stack was a good choice for the project. The one problem I foresee is that the power consumption of the project is a bit too high to run it on a battery and scale up for several plants in the house. This is partly due to WiFi being very power hungry, perhaps a LoRaWAN solution would be better for scaling up the project.
 
+To scale this project would require some modifications. To add other plants would require Node-RED to publish to different topics for each plant in the current setup which it currently does not do. As I have not looked into how this may be done in a clean and manageable way I cannot provide any hard answers here, although I have some small ideas such as attaching the response topic in the initial MQTT message from the Pico WH, though I am unsure whether this is feasible in reality.
+
 ![Pico-WH](./img/pico-wh%20sensor.jpg)
 
 ![Pico-WH](./img/pico-wh-sensor-2.png)

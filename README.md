@@ -437,4 +437,6 @@ Overall the project was, I believe, a success. It does what it sets out to do an
 
 *The Raspberry Pi 4 Model B, power not connected in image*
 
-*Demo video to be added at a later date*
+### Demo Video
+
+A demo video of the project can be found [here on youtube](https://www.youtube.com/watch?v=NiWWoadkrjA).
